@@ -1,0 +1,26 @@
+#!/bin/sh 
+
+#
+# Shell wrapper
+
+EXTENSION="PNG"
+
+DATAFILE="${1:-DATA.CSV}"
+DESTFILE="${1%.CSV}.${EXTENSION}"
+
+#
+# gnuplot script starts here
+gnuplot > "${DESTFILE}" << END-OF-SCRIPT
+#
+# Simple gnuplot script to plot
+# data from a SEFRAM Oscilloscope DS5062
+#
+
+set macro
+PNG_TERM="pngcairo size 640,480 enhanced dash font 'DejaVu Sans,10"
+
+set terminal @${EXTENSION}_TERM
+
+plot "${DATAFILE}" using 1:2 "%lf,%lf,%lf"
+END-OF-SCRIPT
+

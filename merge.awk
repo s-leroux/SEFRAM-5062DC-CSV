@@ -1,9 +1,9 @@
 #!/usr/bin/awk -f
 
 BEGIN { FS=",";
-	date = 0;
-	ch1["Probe Attenuation"] = 10;
-	ch2["Probe Attenuation"] = 10;
+	date = 0.;
+	ch1["Probe Attenuation"] = 10.;
+	ch2["Probe Attenuation"] = 10.;
 }
 
 #
