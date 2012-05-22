@@ -18,11 +18,16 @@ NF==5 {
 NF==3 {
     if ($0 ~ /Waveform Data/) {
 	checkIfCoherent();
-	printf("t,ch1,ch2\n");
+	adjustParameters();
+	
+	printf("%10s %10s %10s\n", 
+		    "\"t (" prefix ch1["Horizontal Units"] ")\"", 
+		    "\"" ch1["Source"] " (" ch1["Vertical Units"] ")\"",
+		    "\"" ch2["Source"] " (" ch2["Vertical Units"] ")\"")
     }
     else {
-	printf("%g,%g,%g\n",
-		    date,
+	printf("%10.3f %10.2f %10.2f\n",
+		    date*tadjust,
 		    $1/ch1["Probe Attenuation"],
 		    $2/ch2["Probe Attenuation"]);
 	date += ch1["Sampling Period"];
@@ -39,6 +44,15 @@ function checkIfCoherent() {
 	print "Inconsistent data";
 	exit 99;
     }
+}
+
+#
+# Adjust some parameters for a better result
+function adjustParameters() {
+    if (ch1["Sampling Period"] < 1e-0) { prefix = ""; tadjust = 1; }
+    if (ch1["Sampling Period"] < 1e-3) { prefix = "m"; tadjust = 1e3; }
+    if (ch1["Sampling Period"] < 1e-6) { prefix = "µ"; tadjust = 1e6; }
+    if (ch1["Sampling Period"] < 1e-9) { prefix = "n"; tadjust = 1e9; }
 }
 
 #
